@@ -52,3 +52,5 @@ const resetFunc = () => {
   scoresElement.textContent = scores;
   lostElement.textContent = lostScores;
 };
+
+
