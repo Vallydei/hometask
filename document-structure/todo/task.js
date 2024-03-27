@@ -4,20 +4,26 @@ const list = document.querySelector("#tasks__list");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const inputValue = form.querySelector("#task__input");
-  const newElement = document.createElement("div");
-  newElement.classList.add("task");
-  const taskTitle = document.createElement("div");
-  taskTitle.classList.add("task__title");
-  taskTitle.textContent = inputValue.value;
-  const closeBtn = document.createElement("a");
-  closeBtn.classList.add("task__remove");
-  closeBtn.setAttribute("href", "#");
-  closeBtn.innerHTML = "&times;";
-  newElement.appendChild(taskTitle);
-  newElement.appendChild(closeBtn);
-  list.appendChild(newElement);
-  closeBtn.addEventListener("click", () => {
-    newElement.remove();
-  });
+  const title = inputValue.value.trim();
+  if (title) {
+    list.insertAdjacentHTML(
+      "afterbegin",
+      `
+  <div class="task">
+    <div class="task__title">
+      ${title}
+    </div>
+    <a href="#" class="task__remove">х</a>
+  </div>
+  `
+    );
+    const closeBtn = document.querySelector(".task__remove");
+    closeBtn.addEventListener("click", () => {
+      closeBtn.parentElement.remove();
+    });
+  } else {
+    alert("поле не может быть пустым");
+  }
+
   form.reset();
 });

@@ -39,27 +39,26 @@ addOneItemBtn.forEach((btn, btnIndex) =>
 );
 
 cartBtn.forEach((el, index) => {
-  el.addEventListener("click", () => {
-    const product = document.querySelector(`div[data-id='${index + 1}']`);
-    const newProduct = product.cloneNode(true);
-    newProduct.classList.add("cart__product");
-    if (cart.querySelector(`div[data-id='${index + 1}']`)) {
-      const value = +newProduct.querySelector(".cart__product-count")
+  el.addEventListener("click", () => {    
+    const targetProduct = cart.querySelector(`div[data-id='${index + 1}']`);
+    if (targetProduct) {
+      const value = +targetProduct.querySelector(".cart__product-count")
         .textContent;
-      newProduct.querySelector(".cart__product-count").textContent =
+      targetProduct.querySelector(".cart__product-count").textContent =
         value + values[index];
-      cart.replaceChild(
-        newProduct,
-        cart.querySelector(`div[data-id='${index + 1}']`)
-      );
     } else {
-      newProduct.querySelector(".product__title").remove();
-      newProduct.querySelector(".product__controls").remove();
-      cart.appendChild(newProduct);
-      const newDiv = document.createElement("div");
-      newDiv.className = "cart__product-count";
-      newDiv.textContent = values[index];
-      newProduct.appendChild(newDiv);
+      const product = document.querySelector(`div[data-id='${index + 1}']`);
+      cart.insertAdjacentHTML(
+        "beforeend",
+        `<div class="cart__product" data-id=${index + 1}>
+            <img class="cart__product-image" src=${product
+              .querySelector(".product__image")
+              .getAttribute("src")}>
+            <div class="cart__product-count">${
+              product.querySelector(".product__quantity-value").textContent
+            }</div>
+         </div>`
+      );
     }
   });
 });
