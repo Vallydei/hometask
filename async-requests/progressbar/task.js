@@ -10,18 +10,28 @@ document.forms.form.addEventListener("submit", (e) => {
 
   xhr.send(formData);
 
-  xhr.addEventListener("readystatechange", () => {
-    if (xhr.readyState === xhr.OPENED) {
-      progress.value = 0.3;
-    } else if (xhr.readyState === xhr.HEADERS_RECEIVED) {
-      progress.value = 0.5;
-    } else if (xhr.readyState === xhr.LOADING) {
-      progress.value = 0.7;
-    } else if (xhr.readyState === xhr.DONE) {
+  xhr.onprogress = function (event) {
+    if (event.loaded === event.total) {
       progress.value = 1;
-      alert('файл успешно отправлен')
     } else {
-      console.log(xhr.statusText);
+      let percentComplete = event.loaded / event.total;
+      if (percentComplete <= 0.3) {
+        progress.value = 0.3;
+      } else if (percentComplete <= 0.5) {
+        progress.value = 0.5;
+      } else if (percentComplete <= 0.7) {
+        progress.value = 0.7;
+      }
     }
-  });
+  };
+
+  xhr.onloadend = function () {
+    if (xhr.status == 201) {
+      alert("Файл успушно загружен");
+    } else if (xhr.status >= 400 && xhr.status < 500) {
+      alert("Ошибка у клиента" + this.status);
+    } else if (xhr.status >= 500) {
+      alert("Ошибка сервера" + this.status);
+    }
+  };
 });
